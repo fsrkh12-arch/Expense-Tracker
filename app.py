@@ -62,7 +62,26 @@ def index():
     else:
         avg_monthly = 0
 
-    return render_template("index.html", expenses=expenses, total=total, month_total=month_total, avg_monthly=avg_monthly)
+    # Get budget
+    budget_row = db.execute("SELECT amount FROM budgets WHERE user_id = ?", user_id)
+    budget = float(budget_row[0]["amount"]) if budget_row else 0.0
+    remaining = budget - month_total
+
+    return render_template("index.html", expenses=expenses, total=total, month_total=month_total, avg_monthly=avg_monthly, budget=budget, remaining=remaining)
+
+
+@app.route("/set_budget", methods=["POST"])
+@login_required
+def set_budget():
+    """Set monthly budget"""
+    amount = request.form.get("budget")
+    if not amount:
+        flash("Please enter a budget amount")
+        return redirect("/")
+    
+    db.execute("INSERT INTO budgets (user_id, amount) VALUES (?, ?) ON CONFLICT(user_id) DO UPDATE SET amount = excluded.amount", session["user_id"], amount)
+    flash("Budget updated! 🎯")
+    return redirect("/")
 
 
 @app.route("/add", methods=["POST"])
