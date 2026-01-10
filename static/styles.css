@@ -15,72 +15,101 @@ body {
     color: var(--text-main);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.5;
+    background-image: radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.05) 0px, transparent 50%),
+                      radial-gradient(at 100% 0%, rgba(79, 70, 229, 0.05) 0px, transparent 50%);
+    min-height: 100vh;
 }
 
 .navbar {
-    background-color: var(--card-bg) !important;
-    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05);
     padding: 1rem 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .navbar-brand {
-    font-weight: 700;
+    font-weight: 800;
     color: var(--primary-color) !important;
     font-size: 1.5rem;
+    letter-spacing: -0.025em;
 }
 
 .card {
-    border: none;
-    border-radius: 1rem;
-    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    border: 1px solid var(--border-color);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
     background-color: var(--card-bg);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
 }
 
 .btn-primary {
     background-color: var(--primary-color);
     border: none;
-    padding: 0.6rem 1.5rem;
-    border-radius: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
     font-weight: 600;
-    transition: all 0.2s;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .btn-primary:hover {
     background-color: var(--primary-hover);
-    transform: translateY(-1px);
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
 }
 
-.form-control {
-    border-radius: 0.5rem;
-    border: 1px solid var(--border-color);
-    padding: 0.75rem;
+.form-control, .form-select {
+    border-radius: 0.75rem;
+    border: 1.5px solid var(--border-color);
+    padding: 0.75rem 1rem;
+    transition: all 0.2s;
 }
 
-.form-control:focus {
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+.form-control:focus, .form-select:focus {
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
     border-color: var(--primary-color);
 }
 
 .expense-item {
-    padding: 1rem;
+    padding: 1.25rem;
     border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.2s;
+    transition: all 0.2s;
+    border-radius: 0.75rem;
+}
+
+.expense-item:last-child {
+    border-bottom: none;
 }
 
 .expense-item:hover {
-    background-color: #f1f5f9;
+    background-color: #f8fafc;
+    transform: translateX(4px);
 }
 
 .amount {
     font-weight: 700;
-    color: var(--text-main);
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .category-badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 9999px;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background-color: #e0e7ff;
-    color: var(--primary-color);
+    padding: 0.35rem 0.85rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
 }
+
+.category-food { background-color: #fee2e2; color: #ef4444; }
+.category-transport { background-color: #e0e7ff; color: #6366f1; }
+.category-bills { background-color: #fef3c7; color: #d97706; }
+.category-entertainment { background-color: #dcfce7; color: #22c55e; }
+.category-other { background-color: #f1f5f9; color: #64748b; }
+
+.fw-600 { font-weight: 600; }
