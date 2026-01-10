@@ -41,7 +41,28 @@ def index():
     expenses = db.execute("SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC", user_id)
     # Ensure amount is treated as float for sum
     total = sum(float(expense["amount"]) for expense in expenses)
-    return render_template("index.html", expenses=expenses, total=total)
+
+    # Current month summary
+    import datetime
+    now = datetime.datetime.now()
+    current_month = now.strftime("%Y-%m")
+    month_expenses = db.execute(
+        "SELECT SUM(amount) as total FROM expenses WHERE user_id = ? AND strftime('%Y-%m', date) = ?",
+        user_id, current_month
+    )
+    month_total = month_expenses[0]["total"] or 0
+
+    # Average monthly expense
+    all_months = db.execute(
+        "SELECT strftime('%Y-%m', date) as month, SUM(amount) as total FROM expenses WHERE user_id = ? GROUP BY month",
+        user_id
+    )
+    if all_months:
+        avg_monthly = sum(m["total"] for m in all_months) / len(all_months)
+    else:
+        avg_monthly = 0
+
+    return render_template("index.html", expenses=expenses, total=total, month_total=month_total, avg_monthly=avg_monthly)
 
 
 @app.route("/add", methods=["POST"])

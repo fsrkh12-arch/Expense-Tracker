@@ -65,6 +65,19 @@
                         </div>
                     {% endif %}
                 </div>
+                <!-- Summary Section -->
+                <div class="mt-4 pt-4 border-top">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <div class="text-muted small mb-1">📅 This Month</div>
+                            <div class="h4 mb-0 amount text-primary">${{ "%.2f"|format(month_total) }}</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-muted small mb-1">📈 Monthly Avg</div>
+                            <div class="h4 mb-0 amount text-success">${{ "%.2f"|format(avg_monthly) }}</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
