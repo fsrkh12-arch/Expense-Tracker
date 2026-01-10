@@ -39,7 +39,9 @@ def index():
     """Show dashboard"""
     user_id = session["user_id"]
     expenses = db.execute("SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC", user_id)
-    return render_template("index.html", expenses=expenses)
+    # Ensure amount is treated as float for sum
+    total = sum(float(expense["amount"]) for expense in expenses)
+    return render_template("index.html", expenses=expenses, total=total)
 
 
 @app.route("/add", methods=["POST"])
@@ -54,11 +56,17 @@ def add():
         flash("Please fill out all fields")
         return redirect("/")
 
-    db.execute(
-        "INSERT INTO expenses (user_id, description, amount, category) VALUES (?, ?, ?, ?)",
-        session["user_id"], description, amount, category
-    )
-    flash("Expense added!")
+    try:
+        # Explicitly provide current timestamp if needed, but schema default should handle it
+        db.execute(
+            "INSERT INTO expenses (user_id, description, amount, category) VALUES (?, ?, ?, ?)",
+            session["user_id"], description, amount, category
+        )
+        flash("Expense added! 💰")
+    except Exception as e:
+        print(f"Error adding expense: {e}")
+        flash("Error adding expense. Please try again.")
+        
     return redirect("/")
 
 
