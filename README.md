@@ -1,6 +1,6 @@
 # Expense Tracker
 
-### Expense Tracker is a simple and elegant multi-user web application built with **Flask**, **SQLite**, **HTML**, **CSS**, and **JavaScript**.  
+### Expense Tracker is a simple and elegant multi-user web application built with **Flask**, **SQLite**, **HTML**, **CSS**.  
 ### The application provides users with a straightforward and intuitive way to manage their personal finances, offering a clean dashboard to track daily and monthly expenses.  
 ### Each user can register and securely log in using hashed passwords, ensuring privacy and security.  
 ### Once logged in, users can add new expenses by specifying an amount, category, description, and date, and they can also edit or delete existing entries.  
@@ -14,3 +14,4 @@
 ### Password security is handled with **Werkzeug**, ensuring that sensitive user information remains protected.  
 ### The frontend is built to be minimal yet effective, allowing users to focus on their finances without unnecessary complexity.  
 ### This project demonstrates practical full-stack development skills while maintaining readability, maintainability, and professional design standards.
+
