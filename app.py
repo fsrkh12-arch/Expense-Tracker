@@ -36,11 +36,39 @@ def login_required(f):
 @app.route("/")
 @login_required
 def index():
-    """Show dashboard (expenses will go here later)"""
+    """Show dashboard"""
     user_id = session["user_id"]
-    # Placeholder: later we’ll fetch expenses from database
-    expenses = []
+    expenses = db.execute("SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC", user_id)
     return render_template("index.html", expenses=expenses)
+
+
+@app.route("/add", methods=["POST"])
+@login_required
+def add():
+    """Add new expense"""
+    description = request.form.get("description")
+    amount = request.form.get("amount")
+    category = request.form.get("category")
+
+    if not description or not amount or not category:
+        flash("Please fill out all fields")
+        return redirect("/")
+
+    db.execute(
+        "INSERT INTO expenses (user_id, description, amount, category) VALUES (?, ?, ?, ?)",
+        session["user_id"], description, amount, category
+    )
+    flash("Expense added!")
+    return redirect("/")
+
+
+@app.route("/delete/<int:id>", methods=["POST"])
+@login_required
+def delete(id):
+    """Delete expense"""
+    db.execute("DELETE FROM expenses WHERE id = ? AND user_id = ?", id, session["user_id"])
+    flash("Expense deleted")
+    return redirect("/")
 
 
 @app.route("/register", methods=["GET", "POST"])
