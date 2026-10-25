@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Expense Tracker</title>
+  <style>
+    :root{--p:#6366f1;--bg:#f8fafc;--card:#fff;--text:#1e293b;--muted:#64748b;--line:#e2e8f0;--danger:#ef4444}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px Inter,system-ui,sans-serif}
+    nav{padding:18px max(24px,calc((100vw - 1100px)/2));background:#ffffffdd;border-bottom:1px solid var(--line);font-size:22px;font-weight:800;color:var(--p)}
+    main{max-width:1100px;margin:32px auto;padding:0 20px;display:grid;grid-template-columns:340px 1fr;gap:24px}.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 10px 24px #0f172a0a}
+    h2{margin:0 0 18px;font-size:20px}label{display:block;margin:12px 0 6px;font-size:13px;color:var(--muted);font-weight:700}input,select,button{font:inherit;border-radius:10px;padding:11px;border:1px solid var(--line);width:100%}button{border:0;background:var(--p);color:white;font-weight:700;cursor:pointer;margin-top:16px}.row{display:flex;gap:10px}.row>*{flex:1}
+    .progress{height:10px;border-radius:99px;background:#e0e7ff;overflow:hidden}.bar{height:100%;background:var(--p);width:0}.budget-line{display:flex;justify-content:space-between;color:var(--muted);font-size:14px;margin:10px 0}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:20px 0}.summary div{padding:14px;border-radius:12px;background:#f8fafc}.summary span{display:block;color:var(--muted);font-size:12px}.summary strong{font-size:20px}.expense{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--line)}.pill{font-size:12px;background:#e0e7ff;color:#4338ca;padding:5px 9px;border-radius:99px}.delete{background:none;color:var(--danger);padding:4px;width:auto;margin:0}
+    .note{color:var(--muted);font-size:13px;margin:0 0 16px}@media(max-width:760px){main{grid-template-columns:1fr}.summary{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <nav>💳 Expense Tracker</nav>
+  <main>
+    <section>
+      <div class="card">
+        <h2>🎯 Monthly Budget</h2>
+        <form id="budgetForm"><label for="budget">Budget</label><div class="row"><input id="budget" type="number" min="0" step="0.01" placeholder="0.00"><button>Set</button></div></form>
+        <div class="budget-line"><span>Budget progress</span><span id="budgetText">$0.00 / $0.00</span></div><div class="progress"><div class="bar" id="bar"></div></div><p class="note" id="remaining">Set a budget to start tracking.</p>
+      </div>
+      <div class="card" style="margin-top:24px"><h2>💰 Add Expense</h2><form id="expenseForm"><label>Description</label><input id="description" required placeholder="Lunch, rent, etc."><label>Amount</label><input id="amount" required type="number" min="0.01" step="0.01" placeholder="0.00"><label>Category</label><select id="category"><option>Food</option><option>Transport</option><option>Bills</option><option>Entertainment</option><option>Other</option></select><button>🚀 Track Expense</button></form></div>
+    </section>
+    <section class="card"><h2>📊 Recent Expenses</h2><p class="note">Saved only in this browser.</p><div class="summary"><div><span>Total</span><strong id="total">$0.00</strong></div><div><span>This month</span><strong id="month">$0.00</strong></div><div><span>Monthly average</span><strong id="average">$0.00</strong></div></div><div id="list"></div></section>
+  </main>
+  <script>
+    const key='expense-tracker-demo-v1',state=JSON.parse(localStorage.getItem(key)||'{"budget":0,"items":[]}');const money=n=>'$'+Number(n||0).toFixed(2);
+    function save(){localStorage.setItem(key,JSON.stringify(state))}function render(){const now=new Date().toISOString().slice(0,7),total=state.items.reduce((n,x)=>n+x.amount,0),month=state.items.filter(x=>x.date.startsWith(now)).reduce((n,x)=>n+x.amount,0);budget.value=state.budget||'';totalEl.textContent=money(total);monthEl.textContent=money(month);average.textContent=money(total);budgetText.textContent=money(month)+' / '+money(state.budget);bar.style.width=Math.min(100,state.budget?month/state.budget*100:0)+'%';remaining.textContent=state.budget?(month<=state.budget?money(state.budget-month)+' left this month':'⚠️ Over budget by '+money(month-state.budget)):'Set a budget to start tracking.';list.innerHTML=state.items.length?state.items.map(x=>'<div class="expense"><div><strong>'+x.description+'</strong><br><small>'+x.date+'</small></div><div><span class="pill">'+x.category+'</span> <strong>-'+money(x.amount)+'</strong> <button class="delete" data-id="'+x.id+'">×</button></div></div>').join(''):'<p class="note">No expenses tracked yet. Start by adding one!</p>';document.querySelectorAll('.delete').forEach(b=>b.onclick=()=>{state.items=state.items.filter(x=>x.id!=b.dataset.id);save();render()})}
+    const budget=document.querySelector('#budget'),totalEl=document.querySelector('#total'),monthEl=document.querySelector('#month'),average=document.querySelector('#average'),budgetText=document.querySelector('#budgetText'),bar=document.querySelector('#bar'),remaining=document.querySelector('#remaining'),list=document.querySelector('#list');
+    budgetForm.onsubmit=e=>{e.preventDefault();state.budget=Number(budget.value);save();render()};expenseForm.onsubmit=e=>{e.preventDefault();state.items.unshift({id:Date.now(),description:description.value.trim(),amount:Number(amount.value),category:category.value,date:new Date().toISOString().slice(0,10)});e.target.reset();save();render()};render();
+  </script>
+</body>
+</html>

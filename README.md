@@ -1,5 +1,11 @@
 # Expense Tracker
 
+## Live browser demo
+
+[Open the GitHub Pages demo](https://fsrkh12-arch.github.io/Expense-Tracker/)
+
+The public demo saves expenses and budgets locally in the visitor's browser. The original Flask application remains unchanged.
+
 ### Expense Tracker is a simple and elegant multi-user web application built with **Flask**, **SQLite**, **HTML**, **CSS**.  
 ### The application provides users with a straightforward and intuitive way to manage their personal finances, offering a clean dashboard to track daily and monthly expenses.  
 ### Each user can register and securely log in using hashed passwords, ensuring privacy and security.  
