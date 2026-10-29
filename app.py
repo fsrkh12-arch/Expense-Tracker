@@ -3,6 +3,7 @@ from flask import Flask, flash, redirect, render_template, request, session, url
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_session import Session
 import os
+import sqlite3
 
 # Configure Flask app
 app = Flask(__name__)
@@ -15,6 +16,30 @@ app.secret_key = os.urandom(24)
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
+
+# Create an empty database on first run, without distributing user data.
+with sqlite3.connect("expenses.db") as connection:
+    connection.executescript("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            hash TEXT NOT NULL
+        );
+        CREATE TABLE IF NOT EXISTS expenses (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            amount REAL NOT NULL,
+            category TEXT NOT NULL,
+            description TEXT,
+            date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );
+        CREATE TABLE IF NOT EXISTS budgets (
+            user_id INTEGER PRIMARY KEY,
+            amount REAL NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        );
+    """)
 
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///expenses.db")
