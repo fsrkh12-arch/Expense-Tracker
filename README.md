@@ -1,23 +1,24 @@
 # Expense Tracker
 
-## Live browser demo
+A personal finance learning project for recording expenses and comparing monthly spending with a budget. The repository contains a Flask application and a separate browser-only demo.
 
-[Open the GitHub Pages demo](https://fsrkh12-arch.github.io/Expense-Tracker/)
+## Try it
 
-The public demo saves expenses and budgets locally in the visitor's browser. The original Flask application remains unchanged.
+[Open the browser demo](https://fsrkh12-arch.github.io/Expense-Tracker/)
 
-### Expense Tracker is a simple and elegant multi-user web application built with **Flask**, **SQLite**, **HTML**, **CSS**.  
-### The application provides users with a straightforward and intuitive way to manage their personal finances, offering a clean dashboard to track daily and monthly expenses.  
-### Each user can register and securely log in using hashed passwords, ensuring privacy and security.  
-### Once logged in, users can add new expenses by specifying an amount, category, description, and date, and they can also edit or delete existing entries.  
-### The dashboard displays a summary of spending, making it easy to monitor habits and plan budgets.  
+The demo stores expenses and budgets in the current browser. It does not use the Flask application's accounts or database, and its data does not sync across devices.
 
-### The application is designed with a focus on usability and responsive design, so it works seamlessly across desktop and mobile devices.  
-### Categories and filters help users organize their expenses efficiently, while a simple interface keeps the experience smooth and distraction-free.  
-### By combining the power of **Python** on the backend with dynamic **JavaScript** and clean **HTML/CSS** on the frontend, Expense Tracker offers a modern and functional personal finance solution suitable for daily use.  
+## Flask application
 
-### The backend leverages **Flask** for routing and session management, **SQLite** for lightweight database storage, and the **CS50 SQL library** for easy database interaction.  
-### Password security is handled with **Werkzeug**, ensuring that sensitive user information remains protected.  
-### The frontend is built to be minimal yet effective, allowing users to focus on their finances without unnecessary complexity.  
-### This project demonstrates practical full-stack development skills while maintaining readability, maintainability, and professional design standards.
+The Flask version supports registration and login, adding and deleting expenses, setting a monthly budget, and viewing totals and a monthly average. Expenses are associated with the signed-in user; passwords are hashed with Werkzeug. The backend uses SQLite through the CS50 SQL library and Flask-Session for sessions. The repository currently includes the database file the app uses.
 
+To run it locally, install Python and run these commands from the repository directory:
+
+```sh
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+flask --app app run
+```
+
+Open the address printed by Flask. The app is a learning project: its direct Python entry point enables debug mode, and it should not be treated as a production finance service without further security and deployment work.
