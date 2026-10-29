@@ -1,6 +1,8 @@
 # Expense Tracker
 
-A personal finance learning project for recording expenses and comparing monthly spending with a budget. The repository contains a Flask application and a separate browser-only demo.
+I built Expense Tracker as a follow-up to my CS50 project, expanding it as a simple personal tool for understanding my income and spending over time. I made it for fun, and using it helped me see more clearly where my money was going. A few friends also tested the tool for me.
+
+The repository contains a Flask application and a separate browser-only demo. Their features and storage differ, as described below.
 
 ## Try it
 
